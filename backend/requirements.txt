@@ -38,7 +38,7 @@ sendgrid==6.10.0
 # Security & Auth
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-pyjwt==2.8.1
+pyjwt==2.10.1
 
 # Utilities
 python-multipart==0.0.6
