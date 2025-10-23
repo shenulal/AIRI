@@ -1,0 +1,2 @@
+"""AIRI Backend Application."""
+
