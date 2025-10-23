@@ -39,11 +39,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Download NLP models
-      working-directory: ./backend
-      run: |
-        python scripts/setup_models.py
-
     - name: Lint with flake8
       working-directory: ./backend
       run: |

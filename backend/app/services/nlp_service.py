@@ -10,9 +10,9 @@ from app.models import Document
 nlp = None
 try:
     nlp = spacy.load("en_core_web_sm")
-except OSError:
-    print("Warning: spaCy model 'en_core_web_sm' not found. NER will be disabled.")
-    print("To enable NER, run: python -m spacy download en_core_web_sm")
+except OSError as e:
+    print(f"Warning: spaCy model 'en_core_web_sm' not found: {e}")
+    print("NER will be disabled. To enable NER, ensure en_core_web_sm is installed.")
     nlp = None
 
 # Sentiment analysis pipeline
