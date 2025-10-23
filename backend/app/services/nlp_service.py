@@ -7,13 +7,13 @@ from sqlalchemy.orm import Session
 from app.models import Document
 
 # Load models
+nlp = None
 try:
     nlp = spacy.load("en_core_web_sm")
 except OSError:
-    print("Downloading spaCy model...")
-    import subprocess
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
+    print("Warning: spaCy model 'en_core_web_sm' not found. NER will be disabled.")
+    print("To enable NER, run: python -m spacy download en_core_web_sm")
+    nlp = None
 
 # Sentiment analysis pipeline
 sentiment_pipeline = pipeline(
@@ -27,15 +27,22 @@ class NLPService:
     
     def extract_entities(self, text: str) -> Dict[str, List[str]]:
         """Extract named entities from text using spaCy."""
-        doc = nlp(text)
-        entities = {}
-        
-        for ent in doc.ents:
-            if ent.label_ not in entities:
-                entities[ent.label_] = []
-            entities[ent.label_].append(ent.text)
-        
-        return entities
+        if nlp is None:
+            return {}
+
+        try:
+            doc = nlp(text)
+            entities = {}
+
+            for ent in doc.ents:
+                if ent.label_ not in entities:
+                    entities[ent.label_] = []
+                entities[ent.label_].append(ent.text)
+
+            return entities
+        except Exception as e:
+            print(f"Error extracting entities: {e}")
+            return {}
     
     def compute_sentiment(self, text: str) -> Tuple[float, str]:
         """Compute sentiment score and label for text."""
